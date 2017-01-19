@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Row } from 'react-bootstrap';
-import MonitorContainer from './MonitorContainer';
-import BeatContainer from './BeatContainer';
+/*import MonitorContainer from './MonitorContainer';
+*/import BeatContainer from './BeatContainer';
 export default class Main extends Component {
   render() {
     return (
@@ -10,7 +10,7 @@ export default class Main extends Component {
 
         <BeatContainer />
 
-        <MonitorContainer />
+        {/*<MonitorContainer />*/}
 
       </Row>
 

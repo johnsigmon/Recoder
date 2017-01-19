@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import Tone from 'tone';
 import Poti from '../components/Poti';
-import Keyboard from '../components/Keyboard';
+/*import Keyboard from '../components/Keyboard';*/
 import QwertyHancock from 'qwerty-hancock';
 
 
@@ -11,6 +11,8 @@ class Oscillator extends Component {
     super(props);
 
     this.env = this.props.envelope;
+    this.fft = this.props.fft;
+    this.meter = this.props.meter;
    this.waves = ['sine','square','triangle','sawtooth'];
 
     this.tone = new Tone.Oscillator({
@@ -27,8 +29,10 @@ class Oscillator extends Component {
     this.tone.type = this.waves[newProps.waveform];
     if (newProps.playing ) {
      this.tone.frequency.value = newProps.playing;
+     console.log(newProps.playing)
     }
   }
+
   render() {
 
     return (
@@ -48,7 +52,9 @@ class Oscillator extends Component {
       decay : 0.21,
       sustain : 0.9,
       release : .9
-    }).toMaster()
+    }).toMaster();
+    this.fft = new Tone.Analyser("fft", 1024);
+    this.meter = new Tone.Meter("signal");
     this.state = {
       frequencies: {
         0: 440
@@ -64,36 +70,37 @@ class Oscillator extends Component {
       },
       currentNote: {
 
+      },
+      views: {
+        0: 1
       }
     };
-    this.setFrequency = this.setFrequency.bind(this);
     this.setDetune = this.setDetune.bind(this);
     this.setVol = this.setVol.bind(this);
     this.setWav = this.setWav.bind(this);
     this.startNote = this.startNote.bind(this);
     this.stopNote = this.stopNote.bind(this);
-
+    this.viewType = this.viewType.bind(this);
   }
   componentDidMount() {
     const settings = {
       id: 'keyboard',
-      width: 600,
       height: 150,
-      startNote: 'A2',
+      startNote: 'C2',
       whiteNotesColour: '#fff',
       blackNotesColour: '#000',
       borderColour: '#000',
       activeColour: 'yellow',
-      octaves: 3
+      octaves: 2
     }
     let that = this
     this.keyboard = new QwertyHancock(settings);
     this.keyboard.keyDown = function( note, frequency) {
-        console.log(note + frequency)
+      /*  console.log(note + frequency)*/
         that.startNote(note, frequency)
       }
     this.keyboard.keyUp = function( note, frequency) {
-     console.log(note + frequency)
+    /* console.log(note + frequency)*/
      that.stopNote(note, frequency)
   }
 }
@@ -127,16 +134,6 @@ class Oscillator extends Component {
 
 
   }
-    setFrequency(note, frequency) {
-
-
-    console.log(frequency);
-    let frequencies = this.state.frequencies
-    frequencies[note] = frequencies;
-    this.setState({
-      frequencies: frequencies
-    });
-  }
   startNote(note) {
 
     this.setState({playing: note});
@@ -151,15 +148,30 @@ class Oscillator extends Component {
  }
 
   startKeyPlay(note, frequency) {
+    this.setState({playing: note});
     this.envelope.triggerAttack();
   }
   stopKeyStop(note, frequency) {
     this.envelope.triggerRelease();
   }
+    viewType( osc, v) {
+
+     let views = this.state.views;
+    views[osc] = v;
+
+    this.setState({
+      views: views
+    });
+
+  }
   render() {
 
     return (
+      <Col md={12} lg={12} style={{padding:'0', margin:'0'}}>
+      <Col md={6} lg={6} style={{backgroundColor: 'lightpink', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
       <div className='synth'>
+      <Col md={12}>
+
      <Oscillator frequency={440}
                   detune={ this.state.detunes[0] }
                   waveform={ this.state.waveforms[0] }
@@ -167,6 +179,10 @@ class Oscillator extends Component {
                   type={ 'square' }
                   envelope={this.envelope}
                   playing={this.state.playing}>
+      <Col md={3}>
+        <div className="notePlaying" style={{float: 'left'}}><h3>{ this.state.playing ? this.state.playing: ''}</h3></div>
+      </Col>
+      <Col md={3}>
           <Poti className='_colored orange'
                 range={[-50,50]}
                 size={60}
@@ -176,6 +192,8 @@ class Oscillator extends Component {
                 steps={[{label:-10},{label:-5},{label:'0'},{label:5},{label:10}]}
                 onChange={ this.setDetune.bind(this, 0) }
                 value={ this.state.detunes[0]} />
+      </Col>
+      <Col md={3}>
           <Poti className='_colored yellow'
                 range={[0,3]}
                 size={60}
@@ -185,6 +203,8 @@ class Oscillator extends Component {
                 steps={[{label:'sin'},{label:'sqr'},{label:'tri'},{label:'saw'}]}
                 onChange={ this.setWav.bind(this, 0) }
                 value={ this.state.waveforms[0]} />
+      </Col>
+      <Col md={3}>
           <Poti className='_colored red'
                 range={[-50,20]}
                 size={60}
@@ -194,19 +214,48 @@ class Oscillator extends Component {
                 steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
                 onChange={ this.setVol.bind(this, 0) }
                 value={ this.state.volumes[0]} />
+      </Col>
+      <Col md={12}>
           <div id='keyboard'
-                onMouseDown={this.setFrequency.bind(this) && this.startNote.bind(this, 0)}
-                onMouseUp={this.setFrequency.bind(this) && this.stopNote}
-                onKeyDown={this.setFrequency.bind(this) && this.startNote.bind(this, 0)}
-                onKeyUp={this.setFrequency.bind(this) && this.stopNote}
+                onMouseDown={this.startNote.bind(this, 0)}
+                onMouseUp={this.stopNote}
+                onKeyDown={this.startNote.bind(this, 0)}
+                onKeyUp={this.stopNote}
             />
+      </Col>
         </Oscillator>
-        <Button id="C4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
+{/*        <Button id="C4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
         <Button id="E4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
         <Button id="G4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
-        <Button id="B4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
+        <Button id="B4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>*/}
+</Col>
+      </div>
+      </Col>
+      <Col md={6} lg={6} style={{backgroundColor: 'lightgreen', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
+        <Col md={2} lg={2}>
+          <h4>View Controls</h4>
+          <Col md={12}>
+              <Poti className='_colored yellow'
+                range={[0,3]}
+                size={60}
+                label={'waveform'}
+                snap={true}
+                fullAngle={300}
+                steps={[{label:'SPEC'},{label:'OSC'},{label:'tri'},{label:'saw'}]}
+                onChange={ this.viewType.bind(this, 0) }
+                value={ this.state.views[0]} />
+          </Col>
+        </Col>
+        <Col md={10} lg={10}>
+        <canvas id='synthview' height='300px' width='500px'></canvas>
+        </Col>
+      </Col>
 
-      </div>);
+
+
+
+      </Col>
+      );
   }
 }
 
