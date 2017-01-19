@@ -21,8 +21,7 @@ class Oscillator extends Component {
 
   }
   componentWillReceiveProps(newProps) {
-    console.log(newProps.playing)
-
+    console.log('Oscillator WillReceiveProps')
     this.tone.detune.value = newProps.detune;
     this.tone.volume.value = newProps.volume;
     this.tone.type = this.waves[newProps.waveform];
@@ -87,19 +86,18 @@ class Oscillator extends Component {
       activeColour: 'yellow',
       octaves: 3
     }
+    let that = this
     this.keyboard = new QwertyHancock(settings);
-
+    this.keyboard.keyDown = function( note, frequency) {
+        console.log(note + frequency)
+        that.startNote(note, frequency)
+      }
+    this.keyboard.keyUp = function( note, frequency) {
+     console.log(note + frequency)
+     that.stopNote(note, frequency)
   }
-  setFrequency(note, frequency) {
+}
 
-
-    console.table(frequency);
-    let frequencies = this.state.frequencies
-    frequencies[note] = frequencies;
-    this.setState({
-      frequencies: frequencies
-    });
-  }
   setDetune(osc, v) {
     console.log('Detuning:' + osc + v)
     let detunes = this.state.detunes;
@@ -129,26 +127,40 @@ class Oscillator extends Component {
 
 
   }
+    setFrequency(note, frequency) {
+
+
+    console.log(frequency);
+    let frequencies = this.state.frequencies
+    frequencies[note] = frequencies;
+    this.setState({
+      frequencies: frequencies
+    });
+  }
   startNote(note) {
-    this.keyboard.keyDown = function( note, frequency) {
-            console.log(note + frequency)
-          }
+
     this.setState({playing: note});
 
      this.envelope.triggerAttack();
 
   }
   stopNote(note) {
-       this.keyboard.keyUp = function( note, frequency) {
-            console.log(note + frequency)
-          }
+
     this.setState({playing: false});
     this.envelope.triggerRelease();
  }
+
+  startKeyPlay(note, frequency) {
+    this.envelope.triggerAttack();
+  }
+  stopKeyStop(note, frequency) {
+    this.envelope.triggerRelease();
+  }
   render() {
+
     return (
       <div className='synth'>
-     <Oscillator frequency={200}
+     <Oscillator frequency={440}
                   detune={ this.state.detunes[0] }
                   waveform={ this.state.waveforms[0] }
                   volume={ this.state.volumes[0] }
@@ -184,7 +196,9 @@ class Oscillator extends Component {
                 value={ this.state.volumes[0]} />
           <div id='keyboard'
                 onMouseDown={this.setFrequency.bind(this) && this.startNote.bind(this, 0)}
-                onMouseUp={this.stopNote}
+                onMouseUp={this.setFrequency.bind(this) && this.stopNote}
+                onKeyDown={this.setFrequency.bind(this) && this.startNote.bind(this, 0)}
+                onKeyUp={this.setFrequency.bind(this) && this.stopNote}
             />
         </Oscillator>
         <Button id="C4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
@@ -196,18 +210,3 @@ class Oscillator extends Component {
   }
 }
 
-/*class Beats extends Component {
-  render() {
-
-    return (
-      <Col md={6} lg={6} style={{backgroundColor: 'lightpink', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
-<div id="content">
-  <Button id="C4">C4</Button>
-  <Button id="E4">E4</Button>
-  <Button id="G4">G4</Button>
-  <Button id="B4">B4</Button>
-</div>
-      </Col>
-    );
-  }
-}*/
