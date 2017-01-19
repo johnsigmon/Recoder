@@ -142,7 +142,7 @@ class Poti extends React.Component {
                       rotate(${deg * -1}deg)
                       scale(${1 / scale})`,
           fontFamily: 'sans-serif',
-          fontSize: '0.5em',
+          fontSize: '0.75em',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -234,7 +234,7 @@ class Poti extends React.Component {
       },
       label: {
         fontFamily: 'sans-serif',
-        fontSize: '0.5em',
+        fontSize: '0.75em',
         display: 'flex',
         marginBottom: '1em',
         flexDirection: 'column',

@@ -184,8 +184,8 @@ class Oscillator extends Component {
       </Col>
       <Col md={3}>
           <Poti className='_colored orange'
-                range={[-50,50]}
-                size={60}
+                range={[-1200,1200]}
+                size={100}
                 label={'detune'}
                 markers={21}
                 fullAngle={300}
@@ -196,7 +196,7 @@ class Oscillator extends Component {
       <Col md={3}>
           <Poti className='_colored yellow'
                 range={[0,3]}
-                size={60}
+                size={100}
                 label={'waveform'}
                 snap={true}
                 fullAngle={300}
@@ -207,7 +207,7 @@ class Oscillator extends Component {
       <Col md={3}>
           <Poti className='_colored red'
                 range={[-50,20]}
-                size={60}
+                size={100}
                 label={'volume'}
                 markers={21}
                 fullAngle={300}
@@ -233,21 +233,20 @@ class Oscillator extends Component {
       </Col>
       <Col md={6} lg={6} style={{backgroundColor: 'lightgreen', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
         <Col md={2} lg={2}>
-          <h4>View Controls</h4>
           <Col md={12}>
               <Poti className='_colored yellow'
                 range={[0,3]}
-                size={60}
-                label={'waveform'}
+                size={100}
+                label={'View Controls'}
                 snap={true}
                 fullAngle={300}
-                steps={[{label:'SPEC'},{label:'OSC'},{label:'tri'},{label:'saw'}]}
+                steps={[{label:'WAV'},{label:'FFT'},{label:'METER'},{label:'stuff'}]}
                 onChange={ this.viewType.bind(this, 0) }
                 value={ this.state.views[0]} />
           </Col>
         </Col>
         <Col md={10} lg={10}>
-        <canvas id='synthview' height='300px' width='500px'></canvas>
+        <canvas id='synthview' height='315px' width='500px'></canvas>
         </Col>
       </Col>
 
