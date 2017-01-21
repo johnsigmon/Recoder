@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
-import Poti from '../components/Poti';
+/*import Poti from '../components/Poti';*/
 
 export default class RecordContainer extends Component {
   render() {
