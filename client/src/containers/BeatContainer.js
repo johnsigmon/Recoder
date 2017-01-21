@@ -9,7 +9,7 @@ import QwertyHancock from 'qwerty-hancock';
 class Oscillator extends Component {
   constructor(props) {
     super(props);
-//OSCILLATOR
+    //OSCILLATOR
     this.env = this.props.envelope;
     this.waves = ['sine','square','triangle','sawtooth'];
     this.tone = new Tone.Oscillator({
@@ -17,31 +17,48 @@ class Oscillator extends Component {
       type: this.waves[this.props.waveform],
       volume: this.props.volume
     }).connect(this.env).start();
-
-//ANIMATION
-    this.meter = this.props.meter;
+    //ANIMATION
+    this.dbs = new Tone.Meter();
     this.waveform = this.props.waveform;
     this.analyser = this.props.analyser;
-//USERMEDIA
+    //USERMEDIA
     this.mic = new Tone.UserMedia({
       "volume": this.props.volume
-    });
-
+    }).connect(this.env).connect(this.dbs).toMaster()
   }
   componentWillReceiveProps(newProps) {
     console.log(newProps.micVolume)
+    //OSCILLATOR
     this.tone.detune.value = newProps.detune;
     this.tone.volume.value = newProps.volume;
-    this.mic.volume.value = newProps.micVolume;
     this.tone.type = this.waves[newProps.waveform];
     if (newProps.playing ) {
      this.tone.frequency.value = newProps.playing;
     }
-    if (newProps.micOn) {
-      console.log(this.mic.volume.value)
+    //ANIMATION
+    console.log(this.dbs.value)
+    //USERMEDIA
+     let thatt = this;
+     console.log(this)
+     console.log(this.mic)
+     this.mic.enumerateDevices().then(function(devices){
+  console.log(devices)
+})
+    if(newProps.micOn) {
+      this.mic.open('Built-in Microphone').then( ()=> {
+        console.log('in the promise')
+      })
+    } else {
+      this.mic.close();
     }
 
+/*      console.log(this.mic.volume.value)
+      this.mic.open().then(()=> {
+        thatt.mic.start(10);
+      })*/
 
+    this.mic.volume.value = newProps.micVolume;
+    console.log(this.mic.state)
   }
 
   render() {
@@ -54,17 +71,18 @@ class Oscillator extends Component {
   }
 }
 
- export default class BeatContainer extends Component {
+export default class BeatContainer extends Component {
   constructor(props) {
     super(props);
+    //OSCILLATOR
     this.envelope = new Tone.AmplitudeEnvelope({
       attack : 0.41,
       decay : 0.21,
       sustain : 0.9,
       release : .9
     }).toMaster();
-    this.meter = new Tone.Meter("signal");
 
+    //ANIMATION
     this.analyser = new Tone.Analyser({
       "type" : "waveform",
       "size" : 256
@@ -184,7 +202,8 @@ class Oscillator extends Component {
       views: views
     });
   }
-  startMic() {
+  startMic(e) {
+    console.log(e)
     this.setState({micOn: true})
 
   /*  console.log(this.analyser)
