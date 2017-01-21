@@ -4,7 +4,7 @@ import App from './App';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
-
+require('rc-slider/assets/index.css');
 
 
 ReactDOM.render(

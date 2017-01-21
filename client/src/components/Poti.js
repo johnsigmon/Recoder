@@ -127,6 +127,7 @@ class Poti extends React.Component {
           position: 'absolute',
           top: '50%',
           left: '50%',
+          color: 'black',
           background: 'currentColor',
           pointerEvents: 'none',
           transform: `translate(-50%, -50%)
@@ -144,6 +145,7 @@ class Poti extends React.Component {
           fontFamily: 'sans-serif',
           fontSize: '0.75em',
           position: 'absolute',
+          color: 'wheat',
           top: '50%',
           left: '50%',
           display: 'flex',
@@ -206,7 +208,7 @@ class Poti extends React.Component {
         position: 'relative',
         height: (parseInt(this.size, 10) + this.margin * 2),
         width: (parseInt(this.size, 10) + this.margin * 2),
-        cursor: 'crosshair'
+        cursor: 'pointer'
       },
       knob: {
         userSelect: 'none',
@@ -219,7 +221,7 @@ class Poti extends React.Component {
         top: '50%',
         left: '50%',
         pointerEvents: 'none',
-        backgroundColor: 'lightblue',
+        backgroundColor: 'peru',
       },
       marker: {
         height: this.center - this.margin,
@@ -227,16 +229,17 @@ class Poti extends React.Component {
         position: 'absolute',
         top: '50%',
         left: '50%',
-        color: 'red',
+        color: 'wheat',
         boxShadow: `0 -${Math.min(20,this.props.size/6)}px 0 -1px currentColor inset`,
         pointerEvents: 'none',
 
       },
       label: {
         fontFamily: 'sans-serif',
+        color: 'wheat',
         fontSize: '0.75em',
         display: 'flex',
-        marginBottom: '1em',
+        marginBottom: '0.25em',
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',

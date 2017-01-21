@@ -16,6 +16,7 @@
     "babel-core": "6.4.5",
     "babel-preset-es2015": "6.3.13",
     "babel-preset-stage-0": "6.5.0",
+    "classnames": "^2.2.5",
     "express": "4.13.3",
     "fs": "0.0.2",
     "sql.js": "^0.3.2"

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Row } from 'react-bootstrap';
 import Tone from 'tone';
 import Poti from '../components/Poti';
+import Visuals from './Visuals'
 /*import Keyboard from '../components/Keyboard';*/
 import QwertyHancock from 'qwerty-hancock';
-
+import Slider from 'rc-slider'
 
 class Oscillator extends Component {
   constructor(props) {
@@ -18,13 +19,13 @@ class Oscillator extends Component {
       volume: this.props.volume
     }).connect(this.env).start();
     //ANIMATION
-    this.dbs = new Tone.Meter();
+    this.meter = new Tone.Meter();
     this.waveform = this.props.waveform;
     this.analyser = this.props.analyser;
     //USERMEDIA
     this.mic = new Tone.UserMedia({
       "volume": this.props.volume
-    }).connect(this.env).connect(this.dbs).toMaster()
+    }).connect(this.env).connect(this.meter).toMaster()
   }
   componentWillReceiveProps(newProps) {
     console.log(newProps.micVolume)
@@ -36,7 +37,7 @@ class Oscillator extends Component {
      this.tone.frequency.value = newProps.playing;
     }
     //ANIMATION
-    console.log(this.dbs.value)
+    console.log(this.meter.value)
     //USERMEDIA
      let thatt = this;
      console.log(this)
@@ -127,7 +128,7 @@ export default class BeatContainer extends Component {
     const settings = {
       id: 'keyboard',
       height: 150,
-      startNote: 'C2',
+      startNote: 'C3',
       whiteNotesColour: '#fff',
       blackNotesColour: '#000',
       borderColour: '#000',
@@ -205,35 +206,6 @@ export default class BeatContainer extends Component {
   startMic(e) {
     console.log(e)
     this.setState({micOn: true})
-
-  /*  console.log(this.analyser)
-    let canvas = document.getElementById('synthview');
-    let context = canvas.getContext("2d");
-    console.log(context);
-        context.canvas.width = canvas.width;
-        context.canvas.height = canvas.height;
-        function drawLoop(){
-          var canvasWidth = context.canvas.width;
-          var canvasHeight = context.canvas.height;
-          requestAnimationFrame(drawLoop);
-          //draw the waveform
-          context.clearRect(0, 0, canvasWidth, canvasHeight);
-          var values = this.analyser.analyse();
-          context.beginPath();
-          context.lineJoin = "round";
-          context.lineWidth = 6;
-          context.strokeStyle = "white";
-          context.moveTo(0, (values[0] / 255) * canvasHeight);
-          for (var i = 1, len = values.length; i < len; i++){
-            var val = values[i] / 255;
-            var x = canvasWidth * (i / (len - 1));
-            var y = val * canvasHeight;
-            context.lineTo(x, y);
-          }
-          context.stroke();
-        }
-
-        drawLoop();*/
   }
   stopMic() {
     this.setState({micOn: false})
@@ -250,8 +222,9 @@ export default class BeatContainer extends Component {
   render() {
 
     return (
+      <Col md={12} style={{padding:'0', margin:'0'}}>
       <Col md={12} lg={12} style={{padding:'0', margin:'0'}}>
-        <Col md={6} lg={6} style={{backgroundColor: 'lightpink', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
+        <Col md={6} lg={6} style={{backgroundColor: 'rosybrown', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
           <div className='synth'>
             <Col md={12}>
 
@@ -264,43 +237,106 @@ export default class BeatContainer extends Component {
                 playing={this.state.playing}
                 micOn={this.state.micOn}
                 micVolume={this.state.micVolumes[0]}>
-                <Col md={3}>
-                  <div className="notePlaying" style={{float: 'left'}}><h3>{ this.state.playing ? this.state.playing: ''}</h3></div>
-                  </Col>
-                <Col md={3}>
-                  <Poti className='_colored orange'
-                        range={[-1200,1200]}
-                        size={100}
-                        label={'detune'}
-                        markers={21}
-                        fullAngle={300}
-                        steps={[{label:-10},{label:-5},{label:'0'},{label:5},{label:10}]}
-                        onChange={ this.setDetune.bind(this, 0) }
-                        value={ this.state.detunes[0]} />
-                </Col>
-                <Col md={3}>
-                  <Poti className='_colored yellow'
-                        range={[0,3]}
-                        size={100}
-                        label={'waveform'}
-                        snap={true}
-                        fullAngle={300}
-                        steps={[{label:'sin'},{label:'sqr'},{label:'tri'},{label:'saw'}]}
-                        onChange={ this.setWav.bind(this, 0) }
-                        value={ this.state.waveforms[0]} />
-                </Col>
-                <Col md={3}>
+
+                <Col md={8} style={{backgroundColor: 'sienna', marginBottom: '20px', borderRight: '3px solid black', borderBottom: '2px solid black', borderTop: '1px solid black', borderLeft: '1px solid black'}}>
+                <Col md={4}>
                   <Poti className='_colored red'
                         range={[-50,20]}
-                        size={100}
+                        size={60}
                         label={'volume'}
                         markers={21}
                         fullAngle={300}
                         steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
                         onChange={ this.setVol.bind(this, 0) }
                         value={ this.state.volumes[0]} />
+
                 </Col>
-                <Col md={12}>
+                <Col md={4}>
+                  <Poti className='_colored orange'
+                        range={[-1200,1200]}
+                        size={60}
+                        label={'detune'}
+                        markers={21}
+                        fullAngle={300}
+                        steps={[{label:-10},{label:-5},{label:'0'},{label:5},{label:10}]}
+                        onChange={ this.setDetune.bind(this, 0) }
+                        value={ this.state.detunes[0]} />
+
+                </Col>
+                <Col md={4} style={{margin: '0 auto'}}>
+                  <Poti className='_colored yellow'
+                        range={[0,3]}
+                        size={60}
+                        label={'waveform'}
+                        snap={true}
+                        fullAngle={300}
+                        steps={[{label:'sin'},{label:'sqr'},{label:'tri'},{label:'saw'}]}
+                        onChange={ this.setWav.bind(this, 0) }
+                        value={ this.state.waveforms[0]} />
+
+                </Col>
+                <Col md={4} style={{margin: '0 auto'}}>
+                    <Poti className='_colored red'
+                          range={[-50,20]}
+                          size={60}
+                          label={'reverb'}
+                          markers={21}
+                          fullAngle={300}
+                          steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
+                          onChange={ this.setMicVol.bind(this, 0) }
+                          value={ this.state.micVolumes[0]} />
+                  </Col>
+                  <Col md={4} style={{margin: '0 auto'}}>
+                    <Poti className='_colored red'
+                          range={[-50,20]}
+                          size={60}
+                          label={'compression'}
+                          markers={21}
+                          fullAngle={300}
+                          steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
+                          onChange={ this.setMicVol.bind(this, 0) }
+                          value={ this.state.micVolumes[0]} />
+                  </Col>
+                  <Col md={4} style={{margin: '0 auto'}}>
+                    <Poti className='_colored red'
+                          range={[-50,20]}
+                          size={60}
+                          label={'distortion'}
+                          markers={21}
+                          fullAngle={300}
+                          steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
+                          onChange={ this.setMicVol.bind(this, 0) }
+                          value={ this.state.micVolumes[0]} />
+                  </Col>
+
+                </Col>
+                <Col md={3} mdOffset={1} style={{backgroundColor: 'sienna', marginBottom: '20px', borderRight: '3px solid black', borderBottom: '2px solid black', borderTop: '1px solid black', borderLeft: '1px solid black'}}>
+                    {Tone.UserMedia.supported ?
+                      <div>
+                        <Poti className='_colored red'
+                          range={[-50,20]}
+                          size={100}
+                          label={'volume'}
+                          markers={21}
+                          fullAngle={300}
+                          steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
+                          onChange={ this.setMicVol.bind(this, 0) }
+                          value={ this.state.micVolumes[0]} />
+                      <Button id="user"
+                          onMouseDown={this.startMic.bind(this, 0)}
+                          onMouseUp={this.stopMic}
+                          style={{marginBottom: '20px'}}>
+                                User Mic
+                    </Button>
+
+                      </div> :
+                      <div>
+                        <h3>No mic support</h3>
+                      </div>
+                    }
+                </Col>
+
+                <Col md={12} style={{marginBottom: '30px'}}>
                   <div id='keyboard'
                         onMouseDown={this.startNote.bind(this, 0)}
                         onMouseUp={this.stopNote}
@@ -309,27 +345,7 @@ export default class BeatContainer extends Component {
                     />
                 </Col>
 
-              {Tone.UserMedia.supported ?
-                <div>
-                  <Button id="user"
-                          onMouseDown={this.startMic.bind(this, 0)}
-                          onMouseUp={this.stopMic}>
-                          User Mic
-                  </Button>
-                  <Poti className='_colored red'
-                    range={[-50,20]}
-                    size={100}
-                    label={'volume'}
-                    markers={21}
-                    fullAngle={300}
-                    steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
-                    onChange={ this.setMicVol.bind(this, 0) }
-                    value={ this.state.micVolumes[0]} />
-              </div> :
-              <div>
-                <h3>No mic support</h3>
-              </div>
-              }
+
                 </Oscillator>
 {/*        <Button id="C4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
         <Button id="E4" onMouseDown={this.startNote} onMouseUp={this.stopNote}>C4</Button>
@@ -339,25 +355,21 @@ export default class BeatContainer extends Component {
           </div>
       </Col>
       <Col md={6} lg={6} style={{backgroundColor: 'lightgreen', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
-        <Col md={2} lg={2}>
-          <Col md={12}>
-            <Poti className='_colored yellow'
-              range={[0,3]}
-              size={100}
-              label={'View Controls'}
-              snap={true}
-              fullAngle={300}
-              steps={[{label:'WAV'},{label:'FFT'},{label:'METER'},{label:'stuff'}]}
-              onChange={ this.viewType.bind(this, 0) }
-              value={ this.state.views[0]} />
-          </Col>
-        </Col>
-        <Col md={10} lg={10}>
-          <canvas id='synthview' height='315px' width='500px'></canvas>
+        <Col md={12} style={{marginBottom: '100px'}}>
+          <Visuals currentNote={this.state.playing} />
         </Col>
       </Col>
     </Col>
-    );
+    <Col md={12} style={{margin: '0', padding: '0'}}>
+      <Col md={6} lg={6} style={{backgroundColor: 'lightblue', height: '315px', padding: '0', margin: '0'}}>
+      </Col>
+      <Col md={6} lg={6} style={{backgroundColor: 'wheat', height: '315px', padding: '0', margin: '0'}}>
+
+
+      </Col>
+    </Col>
+  </Col>
+   );
   }
 }
 
