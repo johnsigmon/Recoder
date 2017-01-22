@@ -13,16 +13,16 @@ class Oscillator extends Component {
     //OSCILLATOR
     this.waveform = this.props.waveform;
     this.env = this.props.envelope;
-    this.rev = this.props.reverb;
-    this.norm = new Tone.Normalize(-50, 20)
-    this.freeverb = new Tone.Freeverb()
 
-    this.waves = ['sine','square','triangle','sawtooth'];
-    this.tone = new Tone.Oscillator({
+ /*   this.norm = new Tone.Normalize(-50, 20)*/
+ /*   this.freeverb = new Tone.Freeverb()*/
+
+    this.waves = ['fmsquare','square','triangle','sawtooth'];
+    this.tone = new Tone.OmniOscillator({
       frequency: this.props.frequency,
       type: this.waves[this.props.waveform],
       volume: this.props.volume
-    }).connect(this.env).connect(this.freeverb).start();
+    }).connect(this.env).start();
     //OSCILLATOR EFFECTS
 /*    this.comp = this.props.comp;
     this.compressionSend = this.tone.send("compression", -Infinity);
@@ -56,8 +56,7 @@ class Oscillator extends Component {
     this.tone.frequency.value = newProps.playing;
   /*  this.distortion.value = newProps.distortion;*/
  /*   this.compressionSend.gain.value = newProps.compression;*/
-    this.freeverb.wet.value = newProps.reverb;
-    this.freeverb.toMaster();
+
 
     }
 
@@ -98,12 +97,13 @@ export default class BeatContainer extends Component {
   constructor(props) {
     super(props);
     //OSCILLATOR
+    this.freeverb = new Tone.Freeverb(0.9, 4000).toMaster()
     this.envelope = new Tone.AmplitudeEnvelope({
       attack : 0.41,
       decay : 0.21,
       sustain : 0.9,
       release : .9
-    }).toMaster();
+    }).connect(this.freeverb).toMaster();
 
 
 
@@ -122,7 +122,7 @@ export default class BeatContainer extends Component {
         0: -20
       },
       reverbs: {
-        0: -20
+        0: 0
       },
       compressions: {
         0: 0
@@ -151,6 +151,12 @@ export default class BeatContainer extends Component {
     this.stopNote = this.stopNote.bind(this);
     this.startMic = this.startMic.bind(this);
     this.stopMic = this.stopMic.bind(this);
+  }
+    componentWillReceiveProps(newProps){
+    console.log('BEAT CONTAINER PROPS')
+    console.log(newProps)
+
+
   }
   componentDidMount() {
     const settings = {
@@ -197,13 +203,16 @@ export default class BeatContainer extends Component {
     });
   }
   setReverb(osc, v) {
-    console.log('Setting Reverb'+ ' osc ' + osc + ' v ' + v )
+    console.log('Incoming Reverb'+ ' osc ' + osc + ' v ' + v )
+    let normalizeDis = (v+50)/100
+    console.log('Adjusted Reverb Value' + normalizeDis)
     let reverbs = this.state.reverbs;
-    reverbs[osc] = v;
+    reverbs[osc] = normalizeDis;
     this.setState({
       reverbs: reverbs
     });
-
+    console.log(this.state.reverbs)
+    this.freeverb.wet.value = this.state.reverbs[0];
   }
 /*  setCompression(osc, v) {
     console.log('Setting Compression' + ' osc ' + osc + ' v ' + v )
@@ -231,7 +240,7 @@ export default class BeatContainer extends Component {
   stopNote(note) {
     this.setState({playing: false});
     this.envelope.triggerRelease();
-    this.freeverb.dispose();
+
 
   }
   startKeyPlay(note, frequency) {
@@ -240,7 +249,7 @@ export default class BeatContainer extends Component {
   }
   stopKeyStop(note, frequency) {
     this.envelope.triggerRelease();
-    this.freeverb.dispose();
+
   }
   startMic(e) {
     this.setState({micOn: true})
@@ -311,12 +320,12 @@ export default class BeatContainer extends Component {
                 </Col>
                 <Col md={4} style={{margin: '0 auto'}}>
                   <Poti className='_reverb'
-                        range={[-50,20]}
+                        range={[-50,50]}
                         size={60}
                         label={'reverb'}
                         markers={21}
                         fullAngle={300}
-                        steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
+                        steps={[{label:0},{label:25},{label:50},{label:75},{label:100}]}
                         onChange={ this.setReverb.bind(this, 0) }
                         value={ this.state.reverbs[0]} />
                 </Col>
