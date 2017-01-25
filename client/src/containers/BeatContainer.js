@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Button, Col } from 'react-bootstrap';
 import Tone from 'tone';
 import Poti from '../components/Poti';
-import Visuals from './Visuals'
+import Visuals from './Visuals';
 import QwertyHancock from 'qwerty-hancock';
+import RecordContainer from './RecordContainer'
 
 class Oscillator extends Component {
   constructor(props) {
@@ -298,9 +299,10 @@ export default class BeatContainer extends Component {
         </Col>
         <Col md={12} style={{margin: '0', padding: '0'}}>
           <Col md={6} lg={6} style={{backgroundColor: 'lightblue', height: '315px', padding: '0', margin: '0'}}>
+
           </Col>
           <Col md={6} lg={6} style={{backgroundColor: 'wheat', height: '315px', padding: '0', margin: '0'}}>
-
+ <RecordContainer />
 
           </Col>
         </Col>
