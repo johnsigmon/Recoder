@@ -4,8 +4,8 @@ import Tone from 'tone';
 import Poti from '../components/Poti';
 import Visuals from './Visuals';
 import QwertyHancock from 'qwerty-hancock';
-import RecordContainer from './RecordContainer'
-
+import RecordContainer from './RecordContainer';
+import PadEffects from '../components/PadEffects';
 class Oscillator extends Component {
   constructor(props) {
     super(props);
@@ -75,19 +75,19 @@ export default class BeatContainer extends Component {
       reverbs: { 0: 0 },
       compressions: { 0: 0 },
       distortions: { 0: 0 },
-      micVolumes: { 0: -20 },
-      waveforms: { 0: 1 }
+      waveforms: { 0: 1 },
+      micVolumes: { 0: -20 }
     };
     this.setVol = this.setVol.bind(this);
     this.setWav = this.setWav.bind(this);
     this.setDetune = this.setDetune.bind(this);
     this.setReverb = this.setReverb.bind(this);
     this.setDistortion = this.setDistortion.bind(this);
-    this.setMicVol = this.setMicVol.bind(this);
     this.startNote = this.startNote.bind(this);
     this.stopNote = this.stopNote.bind(this);
     this.startMic = this.startMic.bind(this);
     this.stopMic = this.stopMic.bind(this);
+    this.setMicVol = this.setMicVol.bind(this);
   }
 
   componentDidMount() {
@@ -139,7 +139,6 @@ export default class BeatContainer extends Component {
     this.setState({
       reverbs: reverbs
     });
-    console.log(this.state.reverbs)
     this.freeverb.wet.value = normalizeVerb;
   }
   setDistortion(osc, v) {
@@ -177,12 +176,13 @@ export default class BeatContainer extends Component {
     this.setState({
       micVolumes: micVolumes
     });
+    console.log(this.state.micVolumes)
   }
   render() {
 
     return (
       <Col md={12} style={{padding:'0', margin:'0'}}>
-        <Col md={12} lg={12} style={{padding:'0', margin:'0'}}>
+
           <Col md={6} lg={6} style={{backgroundColor: 'rosybrown', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
             <div className='synth'>
               <Col md={12}>
@@ -296,11 +296,11 @@ export default class BeatContainer extends Component {
               <Visuals currentNote={this.state.playing} />
             </Col>
           </Col>
-        </Col>
-        <Col md={12} style={{margin: '0', padding: '0'}}>
-          <Col md={6} lg={6} style={{backgroundColor: 'lightblue', height: '315px', padding: '0', margin: '0'}}>
 
-          </Col>
+        <Col md={12} style={{margin: '0', padding: '0'}}>
+
+            <PadEffects />
+
           <Col md={6} lg={6} style={{backgroundColor: 'wheat', height: '315px', padding: '0', margin: '0'}}>
  <RecordContainer />
 
