@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Row, Grid } from 'react-bootstrap';
 import Tone from 'tone';
 import Poti from '../components/Poti';
 import Visuals from './Visuals';
@@ -181,11 +181,16 @@ export default class BeatContainer extends Component {
   render() {
 
     return (
-      <Col md={12} style={{padding:'0', margin:'0'}}>
-
-          <Col md={6} lg={6} style={{backgroundColor: 'rosybrown', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
-            <div className='synth'>
+      <Grid>
+        <Row>
+          <Col md={6} lg={6} id="synth">
+            <Col xs={12} md={12} lg={12} id='analysers'>
               <Col md={12}>
+                <Visuals currentNote={this.state.playing} />
+              </Col>
+            </Col>
+            <div className='synth'>
+              <Col md={12} style={{padding:0}}>
                 <Oscillator frequency={440}
                   detune={ this.state.detunes[0] }
                   waveform={ this.state.waveforms[0] }
@@ -197,8 +202,8 @@ export default class BeatContainer extends Component {
                   playing={this.state.playing}
                   micOn={this.state.micOn}
                   micVolume={this.state.micVolumes[0]}>
-                  <Col md={8} style={{backgroundColor: 'sienna', marginBottom: '20px', borderRight: '3px solid black', borderBottom: '2px solid black', borderTop: '1px solid black', borderLeft: '1px solid black'}}>
-                    <Col md={4}>
+                  <Col md={5} className="synth-groups" style={{padding:0}}>
+                    <Col md={6} style={{margin:0,padding:0}}>
                       <Poti className='_synthVol'
                             range={[-50,20]}
                             size={60}
@@ -209,7 +214,7 @@ export default class BeatContainer extends Component {
                             onChange={ this.setVol.bind(this, 0) }
                             value={ this.state.volumes[0]} />
                     </Col>
-                    <Col md={4}>
+                    <Col md={6} style={{margin:0,padding:0}}>
                       <Poti className='_detune'
                             range={[-1200,1200]}
                             size={60}
@@ -220,7 +225,7 @@ export default class BeatContainer extends Component {
                             onChange={ this.setDetune.bind(this, 0) }
                             value={ this.state.detunes[0]} />
                     </Col>
-                    <Col md={4} style={{margin: '0 auto'}}>
+                    <Col md={6} style={{margin: '0 auto', padding: '0'}}>
                       <Poti className='_waveform'
                             range={[0,3]}
                             size={60}
@@ -231,7 +236,7 @@ export default class BeatContainer extends Component {
                             onChange={ this.setWav.bind(this, 0) }
                             value={ this.state.waveforms[0]} />
                     </Col>
-                    <Col md={4} style={{margin: '0 auto'}}>
+                    <Col md={6} style={{margin: '0 auto', padding: '0'}}>
                       <Poti className='_reverb'
                             range={[-50,50]}
                             size={60}
@@ -242,7 +247,7 @@ export default class BeatContainer extends Component {
                             onChange={ this.setReverb.bind(this, 0) }
                             value={ this.state.reverbs[0]} />
                     </Col>
-                    <Col md={4} style={{margin: '0 auto'}}>
+{/*                    <Col md={4} style={{margin: '0 auto'}}>
                       <Poti className='_distortion'
                             range={[-50,50]}
                             size={60}
@@ -252,14 +257,17 @@ export default class BeatContainer extends Component {
                             steps={[{label:'min'},{},{},{},{label:'max'}]}
                             onChange={ this.setDistortion.bind(this, 0) }
                             value={ this.state.distortions[0]} />
-                    </Col>
+                    </Col>*/}
                   </Col>
-                  <Col md={3} mdOffset={1} style={{backgroundColor: 'sienna', marginBottom: '20px', borderRight: '3px solid black', borderBottom: '2px solid black', borderTop: '1px solid black', borderLeft: '1px solid black'}}>
+                  <Col md={5} style={{padding: "0"}}>
+                    <PadEffects />
+                  </Col>
+                  <Col md={2} className="synth-groups" style={{margin:'0',padding:'0'}}>
                     {Tone.UserMedia.supported ?
                       <div>
                         <Poti className='_colored red'
                             range={[-50,20]}
-                            size={100}
+                            size={70}
                             label={'volume'}
                             markers={21}
                             fullAngle={300}
@@ -284,29 +292,33 @@ export default class BeatContainer extends Component {
                           onMouseUp={this.stopNote}
                           onKeyDown={this.startNote.bind(this, 0)}
                           onKeyUp={this.stopNote}
-                          style={{backgroundColor: 'sienna', marginBottom: '20px', borderTop: '15px solid sienna'}}
+                          style={{backgroundColor: '#33E6B1', marginBottom: '20px', borderTop: '15px solid #33E6B1'}}
                       />
                   </Col>
                 </Oscillator>
               </Col>
             </div>
           </Col>
-          <Col md={6} lg={6} style={{backgroundColor: 'lightgreen', height: '50%', position: 'relative', padding: '0', margin: '0'}}>
-            <Col md={12} style={{marginBottom: '100px'}}>
-              <Visuals currentNote={this.state.playing} />
-            </Col>
+
+{/*        <Col md={6} id="xyPad" style={{margin: '0', padding: '0'}}>
+        <Col xs={12}>
+          <Col xs={6}>
+          <PadEffects />
           </Col>
-
-        <Col md={12} style={{margin: '0', padding: '0'}}>
-
-            <PadEffects />
-
-          <Col md={6} lg={6} style={{backgroundColor: 'wheat', height: '315px', padding: '0', margin: '0'}}>
- <RecordContainer />
+          <Col xs={6} id="options">
+            Test
 
           </Col>
         </Col>
-      </Col>
+        </Col>*/}
+        </Row>
+{/*        <Col xs={12}>
+          <Col md={6} lg={6} style={{backgroundColor: 'wheat', height: '315px', padding: '0', margin: '0'}}>
+            <RecordContainer />
+
+        </Col>
+        </Col>*/}
+      </Grid>
    );
   }
 }

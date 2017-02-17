@@ -56,7 +56,7 @@ class Visuals extends React.Component {
     this.waveformWidth = this.waveformCanvas.width;
     this.waveformHeight = this.waveformCanvas.height;
     this.waveformGradient = this.waveformCtx.createLinearGradient(0, 0, this.waveformWidth, this.waveformHeight);
-    this.waveformGradient.addColorStop(0, 'lightgreen');
+    this.waveformGradient.addColorStop(0, '#33E6B1');
     this.waveformGradient.addColorStop(1, "#000");
     this.drawVisualizers();
   }
@@ -88,7 +88,7 @@ class Visuals extends React.Component {
       hidden: this.state.activeVis !== "wave"
     });
     return (
-      <div className="visualizers" style={{marginBottom: '80px'}}>
+      <div className="visualizers">
       <Col md={12}>
         <Col md={4}>
         <div className="visualizer-labels">
@@ -107,7 +107,7 @@ class Visuals extends React.Component {
         </div>
         </Col>
         <Col md={2} mdOffset={6}>
-        <h3 style={{margin: '0', height: '100%', color: 'lightgreen', position:'relative', top: '60px'}}>{this.props.currentNote}</h3>
+        <h3 style={{margin: '0', height: '100%', color: '#33E6B1', position:'relative', top: '60px'}}>{this.props.currentNote}</h3>
         </Col>
         </Col>
         <canvas className={fftClasses} id="fft-canvas" height="400px"></canvas>

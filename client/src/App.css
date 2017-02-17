@@ -1,3 +1,18 @@
+:root {
+  --main-color: #052436;
+  --accent-color:#33E6B1;
+  --header-color:#E1EFE6;
+  --pinkorange-color: #FE5F55;
+  --goldish-color: #EFCB68;
+}
+/*
+      #052436 rgba(5, 36, 54, 1)
+      #33E6B1
+      #EFCB68
+      #E1EFE6
+      #FE5F55
+*/
+
 .App {
   text-align: center;
 }
@@ -27,10 +42,79 @@
 @charset "UTF-8";
 @import url("https://fonts.googleapis.com/css?family=Inconsolata");
 
-    canvas {
+    canvas#waveform-canvas {
       width: 100%;
       height: 200px;
-      background-color: black;
+      background-color: var(--main-color);
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
     }
+        canvas#fft-canvas {
+      width: 100%;
+      height: 200px;
+      background-color: var(--main-color);
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+
+canvas#fx-canvas {
+  border: 3px solid var(--accent-color);
+  background-color: var(--main-color);
+}
+
+#xyPad {
+  background-color: var(--pinkorange-color);
+}
+div.fxdiv {
+/*  background-color: var(--pinkorange-color);*/
+}
+/*#fx-highlighter {
+  background
+}*/
+#options {
+  background-color: #EFCB68;
+  height: inherit;
+}
+div.fx-pad {
+  background-color: var(--main-color);
+}
+
+#analysers {
+  background-color: var(--accent-color);
+}
+
+#synth {
+  background-color: var(--main-color)
+}
+
+.synth-groups {
+  background-color: var(--accent-color);
+  margin-bottom: 20px;
+  border-right: 3px solid black;
+  border-bottom: 2px solid black;
+  border-top: 1px solid black;
+  border-left: 1px solid black;
+  margin-left: 0;
+  margin-right: 0;
+
+}
+
+div.TouchField {
+  color: var(--main-color);
+}
+div.PotiIndicator {
+   color: var(--main-color);
+}
+/*#keyboard {
+  background-color: var(--accent-color);
+  border-top: 15px solid var(--accent-color);
+}*/
+select.fx-selector {
+  background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+}
+select option {
+  background-color: var(--accent-color);
+}

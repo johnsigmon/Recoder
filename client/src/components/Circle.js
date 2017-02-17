@@ -4,7 +4,7 @@ export default class Circle {
      this.x = 0;
      this.y = 0;
      this.radius = 6;
-     this.color = "rgb(255, 73, 22)";
+     this.color = "#FE5F55";
   }
 
   draw() {

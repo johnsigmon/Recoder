@@ -197,10 +197,10 @@ class Effects extends React.Component {
     return (
       <div className="fx-container" id="fx-highlighter">
         <div className="fx-div">
-          <p className="fx-name name1">{this.state.fx1Active}</p>
-          <p className="fx-name name2">{this.state.fx2Active}</p>
+  {/*        <p className="fx-name name1">{this.state.fx1Active}</p>
+          <p className="fx-name name2">{this.state.fx2Active}</p>*/}
           <div className={fxClasses}>
-            <canvas id="fx-canvas" width="200" height="200"></canvas>
+            <canvas id="fx-canvas" width="175" height="175"></canvas>
           </div>
         </div>
         <div className="fx-selectors">
