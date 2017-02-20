@@ -1,12 +1,12 @@
 import React from 'react';
 import Tone from 'tone';
 import classNames from 'classnames';
-import { Col } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 
 class Visuals extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { activeVis: "fft" };
+    this.state = { activeVis: "wave" };
     this.fftAnalyser = new Tone.Analyser('fft', 32);
     this.waveAnalyser = new Tone.Analyser('waveform', 1024);
     Tone.Master.fan(this.fftAnalyser, this.waveAnalyser);
@@ -71,11 +71,10 @@ class Visuals extends React.Component {
   }
 
   toggleVisualizer(visualizer, e) {
-    if (visualizer === "fft") {
-      this.setState({ activeVis: "fft" });
-    } else if (visualizer === "wave") {
-      this.setState({ activeVis: "wave" });
-    }
+    this.state.activeVis === "wave" ?
+    this.setState({ activeVis: "fft" }):
+    this.setState({ activeVis: "wave" })
+    console.log(this.state)
   }
 
   render() {
@@ -89,29 +88,29 @@ class Visuals extends React.Component {
     });
     return (
       <div className="visualizers">
-      <Col md={12}>
-        <Col md={4}>
-        <div className="visualizer-labels">
-          <div
-            className="visualizer-label"
-            id="fa-tab"
-            onClick={this.toggleVisualizer.bind(this, "fft")}>
-            Frequency/Amplitude
-          </div>
-          <div
-            className="visualizer-label"
-            id="wave-tab"
-            onClick={this.toggleVisualizer.bind(this, "wave")}>
-            Waveform
-          </div>
-        </div>
-        </Col>
-        <Col md={2} mdOffset={6}>
-        <h3 style={{margin: '0', height: '100%', color: '#33E6B1', position:'relative', top: '60px'}}>{this.props.currentNote}</h3>
-        </Col>
+        <Col md={12}>
+
+            <h3 style={{marginTop: '-35px', height: '100%', color: '#33E6B1', position:'relative', top: '75px', float: 'right'}}>{this.props.currentNote}</h3>
+
         </Col>
         <canvas className={fftClasses} id="fft-canvas" height="400px"></canvas>
         <canvas className={waveClasses} id="waveform-canvas" height="400px"></canvas>
+        <div className="visualizer-labels">
+          {this.state.activeVis === "wave" ?
+          <Button
+            className={(this.state.activeVis === "wave") ? "visualizer-label active" : "visualizer-label"}
+            id="wave-tab"
+            onClick={this.toggleVisualizer.bind(this, "wave")}>
+            Waveform
+          </Button> :
+          <Button
+            className={(this.state.activeVis === "fft") ? "visualizer-label active" : "visualizer-label"}
+            id="fa-tab"
+            onClick={this.toggleVisualizer.bind(this, "fft")}>
+            Frequency/Amplitude
+          </Button>
+        }
+        </div>
 
       </div>
     );

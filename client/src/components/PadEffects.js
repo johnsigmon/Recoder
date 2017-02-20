@@ -122,7 +122,7 @@ class Effects extends React.Component {
   initializeCanvas() {
     this.ctx.globalCompositeOperation = "source-over";
     this.ctx.clearRect(0, 0, 300, 300);
-    this.ctx.fillStyle = "black";
+    this.ctx.fillStyle = "#052436";
     this.ctx.fillRect(0, 0, 300, 300);
   }
 

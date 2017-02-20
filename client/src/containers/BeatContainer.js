@@ -26,8 +26,10 @@ class Oscillator extends Component {
   }
   componentWillReceiveProps(newProps) {
     //OSCILLATOR
+    console.log(newProps)
     this.tone.volume.value = newProps.volume;
     this.tone.detune.value = newProps.detune;
+   /* this.tone.fineDetune.value = newProps.fineDetune;*/
     this.tone.type = this.waves[newProps.waveform];
     if (newProps.playing ) {
       this.tone.frequency.value = newProps.playing;
@@ -71,6 +73,7 @@ export default class BeatContainer extends Component {
     this.state = {
       frequencies: { 0: 440 },
       detunes: { 0: 0 },
+     /* fineDetunes: { 0: 0 },*/
       volumes: { 0: -20 },
       reverbs: { 0: 0 },
       compressions: { 0: 0 },
@@ -81,6 +84,7 @@ export default class BeatContainer extends Component {
     this.setVol = this.setVol.bind(this);
     this.setWav = this.setWav.bind(this);
     this.setDetune = this.setDetune.bind(this);
+ /*   this.setFineDetune = this.setFineDetune.bind(this);*/
     this.setReverb = this.setReverb.bind(this);
     this.setDistortion = this.setDistortion.bind(this);
     this.startNote = this.startNote.bind(this);
@@ -99,7 +103,7 @@ export default class BeatContainer extends Component {
       blackNotesColour: '#000',
       borderColour: '#000',
       activeColour: 'lightblue',
-      octaves: 2
+      octaves: 3
     }
     let that = this
     this.keyboard = new QwertyHancock(settings);
@@ -132,6 +136,13 @@ export default class BeatContainer extends Component {
       detunes: detunes
     });
   }
+/*  setFineDetune(osc, v) {
+    let fineDetunes = this.state.fineDetunes;
+    fineDetunes[osc] = v;
+    this.setState({
+      fineDetunes: fineDetunes
+    });
+  }*/
   setReverb(osc, v) {
     let normalizeVerb = (v+50)/100
     let reverbs = this.state.reverbs;
@@ -176,14 +187,14 @@ export default class BeatContainer extends Component {
     this.setState({
       micVolumes: micVolumes
     });
-    console.log(this.state.micVolumes)
+
   }
   render() {
 
     return (
       <Grid>
         <Row>
-          <Col md={6} lg={6} id="synth">
+          <Col md={10} mdOffset={1} lg={10} lgOffset={1} id="synth">
             <Col xs={12} md={12} lg={12} id='analysers'>
               <Col md={12}>
                 <Visuals currentNote={this.state.playing} />
@@ -225,6 +236,17 @@ export default class BeatContainer extends Component {
                             onChange={ this.setDetune.bind(this, 0) }
                             value={ this.state.detunes[0]} />
                     </Col>
+          {/*          <Col md={6} style={{margin:0,padding:0}}>
+                      <Poti className='_fineDetune'
+                            range={[-400,400]}
+                            size={60}
+                            label={'fineDetune'}
+                            markers={21}
+                            fullAngle={300}
+                            steps={[{label:-10},{label:-5},{label:'0'},{label:5},{label:10}]}
+                            onChange={ this.setFineDetune.bind(this, 0) }
+                            value={ this.state.fineDetunes[0]} />
+                    </Col>*/}
                     <Col md={6} style={{margin: '0 auto', padding: '0'}}>
                       <Poti className='_waveform'
                             range={[0,3]}
@@ -243,7 +265,7 @@ export default class BeatContainer extends Component {
                             label={'reverb'}
                             markers={21}
                             fullAngle={300}
-                            steps={[{label:'min'},{},{},{},{label:'man'}]}
+                            steps={[{label:'min'},{},{},{},{label:'max'}]}
                             onChange={ this.setReverb.bind(this, 0) }
                             value={ this.state.reverbs[0]} />
                     </Col>
@@ -277,7 +299,7 @@ export default class BeatContainer extends Component {
                         <Button id="user"
                             onMouseDown={this.startMic.bind(this, 0)}
                             onMouseUp={this.stopMic}
-                            style={{marginBottom: '20px'}}>
+                            >
                             User Mic
                         </Button>
                       </div> :

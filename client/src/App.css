@@ -48,6 +48,7 @@
       background-color: var(--main-color);
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
+      margin-top: 30px;
     }
         canvas#fft-canvas {
       width: 100%;
@@ -55,6 +56,7 @@
       background-color: var(--main-color);
       border-bottom-left-radius: 5px;
       border-bottom-right-radius: 5px;
+      margin-top: 30px;
     }
 
 
@@ -106,15 +108,59 @@ div.TouchField {
 div.PotiIndicator {
    color: var(--main-color);
 }
-/*#keyboard {
-  background-color: var(--accent-color);
-  border-top: 15px solid var(--accent-color);
-}*/
+div.visualizer-labels {
+  margin: 5px auto;
+}
 select.fx-selector {
   background-color: var(--main-color);
   color: var(--accent-color);
   border: 0;
 }
+button#wave-tab.visualizer-label.active {
+    background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+  text-shadow: none;
+}
+button#fa-tab.visualizer-label.active {
+    background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+  text-shadow: none;
+}
+button#user.btn.btn-default {
+  margin: 15px;
+  background-image: none;
+  background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+  text-shadow: none;
+  outline: none;
+}
+button#user.btn.btn-default:active {
+
+  background-color: var(--pinkorange-color);
+  color: var(--main-color);
+  border: 0;
+  text-shadow: none;
+  box-shadow: none;
+  outline: none;
+}
+
+div.dropdown.btn-group{
+    background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+}
 select option {
   background-color: var(--accent-color);
+}
+
+li.visualizer-label {
+      background-color: var(--main-color);
+  color: var(--accent-color);
+  border: 0;
+}
+li a {
+   background-color: var(--accent-color);
 }
