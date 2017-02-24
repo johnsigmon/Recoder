@@ -113,6 +113,9 @@ export default class BeatContainer extends Component {
     this.keyboard.keyUp = function( note, frequency) {
       that.stopNote(note, frequency)
     }
+
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
+    document.addEventListener("keyup", this.handleKeyUp.bind(this));
   }
   //OSCILLATOR
   setVol(osc, v) {
@@ -165,6 +168,7 @@ export default class BeatContainer extends Component {
   }
 
   startNote(note) {
+
     this.setState({playing: note});
     this.envelope.triggerAttack();
 
@@ -176,7 +180,21 @@ export default class BeatContainer extends Component {
 
   }
   startMic(e) {
+    console.log(e)
     this.setState({micOn: true})
+  }
+  stopMic() {
+    this.setState({micOn: false})
+  }
+  handleKeyDown(e) {
+    if(e.code == 'Enter'){
+      this.setState({micOn: true})
+    }
+  }
+  handleKeyUp(e) {
+    if(e.code == 'Enter'){
+      this.setState({micOn: false})
+    }
   }
   stopMic() {
     this.setState({micOn: false})
@@ -192,7 +210,9 @@ export default class BeatContainer extends Component {
   render() {
 
     return (
-      <Grid>
+      <Grid
+        onKeyDown={this.handleKeyDown}
+        onKeyUp={this.handleKeyUp}>
         <Row>
           <Col md={10} mdOffset={1} lg={10} lgOffset={1} id="synth">
             <Col xs={12} md={12} lg={12} id='analysers'>
@@ -236,17 +256,7 @@ export default class BeatContainer extends Component {
                             onChange={ this.setDetune.bind(this, 0) }
                             value={ this.state.detunes[0]} />
                     </Col>
-          {/*          <Col md={6} style={{margin:0,padding:0}}>
-                      <Poti className='_fineDetune'
-                            range={[-400,400]}
-                            size={60}
-                            label={'fineDetune'}
-                            markers={21}
-                            fullAngle={300}
-                            steps={[{label:-10},{label:-5},{label:'0'},{label:5},{label:10}]}
-                            onChange={ this.setFineDetune.bind(this, 0) }
-                            value={ this.state.fineDetunes[0]} />
-                    </Col>*/}
+
                     <Col md={6} style={{margin: '0 auto', padding: '0'}}>
                       <Poti className='_waveform'
                             range={[0,3]}
@@ -295,6 +305,7 @@ export default class BeatContainer extends Component {
                             fullAngle={300}
                             steps={[{label:'min'},{},{},{},{},{},{},{},{},{},{label:'max'}]}
                             onChange={ this.setMicVol.bind(this, 0) }
+
                             value={ this.state.micVolumes[0]} />
                         <Button id="user"
                             onMouseDown={this.startMic.bind(this, 0)}
@@ -315,7 +326,7 @@ export default class BeatContainer extends Component {
                           onKeyDown={this.startNote.bind(this, 0)}
                           onKeyUp={this.stopNote}
                           style={{backgroundColor: '#33E6B1', marginBottom: '20px', borderTop: '15px solid #33E6B1'}}
-                      />
+                    />
                   </Col>
                 </Oscillator>
               </Col>
